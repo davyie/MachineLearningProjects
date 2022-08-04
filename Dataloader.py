@@ -35,5 +35,11 @@ class Loader:
     data = np.load(path)
     return torch.tensor(data)
 
+def write_to_file(name, data):
+  f = open(name, "a")
+  f.write("Id,Predicted\n")
+  for k, v in enumerate(data):
+    f.write('%d,%d\n' % (k, v))
+
   
   
