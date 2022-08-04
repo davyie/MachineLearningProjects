@@ -17,9 +17,9 @@ def main() :
   output = 45
 
   # Training 
-  epochs = 10
+  epochs = 30
   batch_size = 256
-  number_of_batches = 200
+  number_of_batches = 2048
   model_basic = basic(input_size, hidden, output)
   criterion = torch.nn.CrossEntropyLoss()
   optimizer = torch.optim.SGD(model_basic.parameters(), lr=1e-6)
@@ -59,15 +59,15 @@ def main() :
 
   # Predict the test data 
   x_test_data = loader.read_x_test('./intent-detection-by-sinch/X_test.npy')
-  test_prediction = torch.argmax(model_basic((x_test_data)))
-  print(test_prediction)
-  # write_to_file(test_prediction)
+  test_prediction = torch.argmax(model_basic(x_test_data), dim=1)
+  # print(test_prediction)
+  write_to_file(test_prediction)
 
 def write_to_file(data):
-  f = open("y_text.csv", "a")
-  f.write("Id,Predicted")
+  f = open("y_test.csv", "a")
+  f.write("Id,Predicted\n")
   for k, v in enumerate(data):
-    f.write('%5d,%5d' % (k, v))
+    f.write('%d,%d\n' % (k, v))
   
 
 if __name__ == "__main__":
