@@ -1,5 +1,5 @@
 from Dataloader import Loader 
-from Train import train_basic
+from Train import train_basic, train_deep_basic
 
 def main() :
   # Load in the data 
@@ -13,7 +13,7 @@ def main() :
   hidden = 128
   output = 45
 
-  train_basic(input_size=input_size, hidden=hidden, output=output, x_data=x_data, y_data=y_data, number_of_datapoints=number_of_datapoints, x_test_data=x_test_data)
+  train_deep_basic(input_size=input_size, hidden=hidden, output=output, x_data=x_data, y_data=y_data, number_of_datapoints=number_of_datapoints, x_test_data=x_test_data)
   
 
 if __name__ == "__main__":

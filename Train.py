@@ -1,5 +1,5 @@
 import torch 
-from Models import basic
+from Models import basic, deep_basic
 import random as r 
 from Dataloader import write_to_file
 
@@ -54,4 +54,46 @@ def train_basic(input_size, hidden, output, x_data, y_data, number_of_datapoints
   write_to_file("y_basic_test.csv", test_prediction)
 
 def train_deep_basic(input_size, hidden, output, x_data, y_data, number_of_datapoints, x_test_data):
-  print("HELLO")
+  # Init model 
+  deep_basic_model = deep_basic(input_size=input_size, hidden_size=hidden, output_size=output)
+
+  # Init optimiser & criterion
+  optimiser = torch.optim.SGD(deep_basic_model.parameters(), lr=1e-6)
+  criterion = torch.nn.CrossEntropyLoss()
+
+  # Training loop
+  epochs = 30
+  current_loss = 0
+  batch_size = 256
+  nr_of_batches = number_of_datapoints - batch_size
+
+  for epoch in range(epochs):
+    # Add mini batch later 
+    for start in range(nr_of_batches):
+
+      # start = r.randint(0, number_of_datapoints - batch_size)
+      x_batch = x_data[start:start+batch_size, :]
+      y_batch = y_data[start:start+batch_size]
+
+      y_pred = deep_basic_model(x_batch.to(device))
+
+      loss = criterion(y_pred, y_batch)
+
+      loss.backward()
+      optimiser.step()
+
+      current_loss += loss.item()
+    print('Loss after epoch %5d: %.3f' %
+            (epoch + 1, current_loss))
+    current_loss = 0.0
+  
+  # Predict the training data 
+  print("Prediction")
+  predictions = torch.argmax(torch.softmax(deep_basic_model(x_data.to(device)), dim=1), dim=1)
+
+  correct_labelled = 0 
+  for i in range(number_of_datapoints):
+    if predictions[i] == y_data[i]:
+      correct_labelled = correct_labelled + 1
+  print('Correct labelled %5d out of %5d' % (correct_labelled, number_of_datapoints))
+  print('Ratio %5f' % (float(correct_labelled) / float(number_of_datapoints)))
