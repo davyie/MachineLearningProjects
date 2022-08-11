@@ -1,5 +1,4 @@
-
-# About this repo 
+# About this project 
 This repo is about creating models for Kaggle competition of Sinch where we are suppose to predict multi class intention for different sentences. We get a sentence embedding, a vector that represents the sentence and we are suppose to output a class between 1 and 45. We do this for 1663 embeddings and we want to try and achieve higher F1 score than 0,62.
 
 # Learning objectives 
@@ -36,3 +35,6 @@ We try 128x128, 256x128 and 512x256.
 The 128x128 performs very bad and it doesn't learn anything. 256x128 learns a bit more and 512x256 gets the best correctly labelled datapoints for training data. With further exploration with minibatch we are able to achieve a good performance with 128x128 where the engine goes through the data sequentially rather than random. 
 
 They are trained for 30 epochs with a batchsize of 256 and the number of batches is 1000. 
+
+# Feedforward network with dropout matrix 
+This solution contains a feedforward network with dropout matrix of the input where we replace certain embeddings. Additionally, we add `tanh` as activation function instead of Rectified Linear Unit. This gives us a performance of 0.67 which is above 0.62. This is the best one so far. 
